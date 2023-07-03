@@ -6,14 +6,16 @@ import (
 )
 
 func main() {
-	go sexyCount("nico")
-	go sexyCount("flynn")
-	time.Sleep(time.Second * 5)
+	c := make(chan string)
+	people := [2]string{"nico", "flynn"}
+	for _, person := range people {
+		go sexyCount(person, c)
+	}
+	fmt.Println(<-c)
+	fmt.Println(<-c)
 }
 
-func sexyCount(person string) {
-	for i := 0; i < 10; i++ {
-		fmt.Println(person, "is sexy", i)
-		time.Sleep(time.Second)
-	}
+func sexyCount(person string, c chan string) {
+	time.Sleep(time.Second * 5)
+	c <- person
 }
